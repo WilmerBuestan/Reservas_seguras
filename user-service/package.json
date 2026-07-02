@@ -1,5 +1,6 @@
 {
     "name": "user-service",
+    "author": "thegranwil",
     "main": "index.js",
     "type": "module",
     "scripts": {

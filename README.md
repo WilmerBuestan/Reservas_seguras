@@ -35,7 +35,7 @@
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/reservas-ec.git
+git clone https://github.com/thegranwil/reservas-ec.git
 cd reservas-ec
 ```
 
