@@ -93,7 +93,7 @@ La app estará disponible en http://localhost:3000
 - Gestión de microservicios independientes
 
 -------
-1
+
 ## 🔍 Calidad de Código y Seguridad
 
 Este proyecto implementa un sistema integral de análisis automático de código usando **SonarCloud**, **GitHub Actions** y notificaciones en **Telegram**.
