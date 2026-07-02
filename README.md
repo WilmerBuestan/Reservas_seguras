@@ -91,4 +91,30 @@ La app estará disponible en http://localhost:3000
 - Notificaciones por email (reserva y cancelación)
 
 - Gestión de microservicios independientes
-# Reservas_seguras
+
+---
+
+## 🔍 Calidad de Código
+
+Este proyecto implementa análisis automático de código en cada push utilizando **SonarCloud** y **GitHub Actions**.
+
+### Herramientas
+- **SonarCloud:** Análisis estático de código en la nube
+- **GitHub Actions:** Automatización en cada push/PR
+- **Telegram:** Notificaciones automáticas al equipo
+
+### Dashboards
+- 📊 **SonarCloud:** https://sonarcloud.io/dashboard?id=WilmerBuestan_Reservas_seguras
+- 🔄 **GitHub Actions:** https://github.com/WilmerBuestan/Reservas_seguras/actions
+
+### Quality Gate
+El proyecto define umbrales estrictos que todo commit debe cumplir:
+- ✅ 0 problemas críticos o bloqueantes
+- ✅ Máximo 5 problemas mayores
+- ✅ Mínimo 80% cobertura de código
+- ✅ Máximo 3% líneas duplicadas
+
+### Configuración
+Lee **SETUP_SONARCLOUD_TELEGRAM.md** para configurar en tu entorno.
+
+---
