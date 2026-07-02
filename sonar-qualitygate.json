@@ -1,0 +1,60 @@
+{
+  "name": "StrictGate",
+  "isDefault": false,
+  "conditions": [
+    {
+      "metric": "blocker_violations",
+      "operator": "GREATER_THAN",
+      "error": "0",
+      "scope": "ALL"
+    },
+    {
+      "metric": "critical_violations",
+      "operator": "GREATER_THAN",
+      "error": "0",
+      "scope": "ALL"
+    },
+    {
+      "metric": "major_violations",
+      "operator": "GREATER_THAN",
+      "error": "5",
+      "scope": "ALL"
+    },
+    {
+      "metric": "security_hotspots_reviewed",
+      "operator": "LESS_THAN",
+      "error": "100",
+      "scope": "ALL"
+    },
+    {
+      "metric": "coverage",
+      "operator": "LESS_THAN",
+      "error": "80",
+      "scope": "ALL"
+    },
+    {
+      "metric": "duplicated_lines_density",
+      "operator": "GREATER_THAN",
+      "error": "3",
+      "scope": "ALL"
+    },
+    {
+      "metric": "sqale_rating",
+      "operator": "GREATER_THAN",
+      "error": "3",
+      "scope": "ALL"
+    },
+    {
+      "metric": "complexity",
+      "operator": "GREATER_THAN",
+      "error": "50",
+      "scope": "ALL"
+    },
+    {
+      "metric": "cognitive_complexity",
+      "operator": "GREATER_THAN",
+      "error": "30",
+      "scope": "ALL"
+    }
+  ]
+}

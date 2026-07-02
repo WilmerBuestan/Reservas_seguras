@@ -1,0 +1,51 @@
+name: Telegram Notification
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  telegram-notification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get commit info
+        id: commit
+        run: |
+          echo "author=$(git log -1 --pretty=format:'%an')" >> $GITHUB_OUTPUT
+          echo "message=$(git log -1 --pretty=format:'%s')" >> $GITHUB_OUTPUT
+          echo "hash=$(git log -1 --pretty=format:'%h')" >> $GITHUB_OUTPUT
+          echo "branch=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Get changed files
+        id: files
+        run: |
+          FILES=$(git diff --name-only HEAD~1..HEAD | head -10)
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Send notification to Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            📢 **New Push Detected**
+
+            👤 **Author:** ${{ steps.commit.outputs.author }}
+            🌿 **Branch:** ${{ steps.commit.outputs.branch }}
+            📝 **Commit:** ${{ steps.commit.outputs.hash }}
+            💬 **Message:** ${{ steps.commit.outputs.message }}
+
+            🔗 **Link:** ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
+
+            📋 **Files Changed:**
+            ${{ steps.files.outputs.files }}

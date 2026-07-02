@@ -1,0 +1,65 @@
+name: SonarQube Analysis
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  sonarqube-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          cd auth-service && npm install
+          cd ../user-service && npm install
+          cd ../booking-service && npm install
+          cd ../notification-service && npm install
+          cd ../frontend && npm install
+
+      - name: Run SonarQube Scanner
+        uses: SonarSource/sonarqube-scan-action@master
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=reservas-ec
+            -Dsonar.projectName=ReservasEC
+            -Dsonar.projectVersion=1.0.0
+            -Dsonar.qualitygate.wait=true
+
+      - name: SonarQube Quality Gate check
+        uses: SonarSource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ SonarQube Quality Gate failed!"
+          echo "Check the analysis at: ${{ secrets.SONAR_HOST_URL }}/dashboard?id=reservas-ec"
+
+      - name: Notify on success
+        if: success()
+        run: |
+          echo "✅ SonarQube Quality Gate passed!"
+          echo "Dashboard: ${{ secrets.SONAR_HOST_URL }}/dashboard?id=reservas-ec"
