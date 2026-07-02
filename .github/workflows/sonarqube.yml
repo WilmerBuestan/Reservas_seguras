@@ -28,7 +28,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=WilmerBuestan_Reservas_seguras
-            -Dsonar.organization=wilmer-buestan
+            -Dsonar.organization=wilmerbuestan
             -Dsonar.qualitygate.wait=true
 
       - name: SonarCloud Quality Gate check
