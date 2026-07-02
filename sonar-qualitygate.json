@@ -1,0 +1,61 @@
+{
+  "name": "StrictGate",
+  "description": "Strict Quality Gate para ReservasEC - Requiere cumplimiento de 9 métricas críticas",
+  "isDefault": false,
+  "conditions": [
+    {
+      "metric": "blocker_violations",
+      "operator": "GREATER_THAN",
+      "error": "0",
+      "description": "Blocker Issues"
+    },
+    {
+      "metric": "critical_violations",
+      "operator": "GREATER_THAN",
+      "error": "0",
+      "description": "Critical Issues"
+    },
+    {
+      "metric": "major_violations",
+      "operator": "GREATER_THAN",
+      "error": "5",
+      "description": "Major Issues"
+    },
+    {
+      "metric": "security_hotspots_reviewed",
+      "operator": "LESS_THAN",
+      "error": "100",
+      "description": "Security Hotspots Reviewed %"
+    },
+    {
+      "metric": "coverage",
+      "operator": "LESS_THAN",
+      "error": "80",
+      "description": "Coverage %"
+    },
+    {
+      "metric": "duplicated_lines_density",
+      "operator": "GREATER_THAN",
+      "error": "3",
+      "description": "Duplicated Lines %"
+    },
+    {
+      "metric": "sqale_rating",
+      "operator": "GREATER_THAN",
+      "error": "2.5",
+      "description": "Technical Debt Ratio %"
+    },
+    {
+      "metric": "complexity",
+      "operator": "GREATER_THAN",
+      "error": "50",
+      "description": "Cyclomatic Complexity (total)"
+    },
+    {
+      "metric": "cognitive_complexity",
+      "operator": "GREATER_THAN",
+      "error": "30",
+      "description": "Cognitive Complexity (total)"
+    }
+  ]
+}

@@ -20,32 +20,58 @@ jobs:
         id: commit
         run: |
           echo "author=$(git log -1 --pretty=format:'%an')" >> $GITHUB_OUTPUT
+          echo "email=$(git log -1 --pretty=format:'%ae')" >> $GITHUB_OUTPUT
           echo "message=$(git log -1 --pretty=format:'%s')" >> $GITHUB_OUTPUT
+          echo "body=$(git log -1 --pretty=format:'%b')" >> $GITHUB_OUTPUT
           echo "hash=$(git log -1 --pretty=format:'%h')" >> $GITHUB_OUTPUT
+          echo "hash_long=$(git log -1 --pretty=format:'%H')" >> $GITHUB_OUTPUT
           echo "branch=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
+          echo "date=$(git log -1 --pretty=format:'%ai')" >> $GITHUB_OUTPUT
 
       - name: Get changed files
         id: files
         run: |
-          FILES=$(git diff --name-only HEAD~1..HEAD | head -10)
+          FILES=$(git diff --name-only HEAD~1..HEAD | head -15)
+          FILE_COUNT=$(git diff --name-only HEAD~1..HEAD | wc -l)
           echo "files<<EOF" >> $GITHUB_OUTPUT
           echo "$FILES" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
+          echo "count=$FILE_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Build Telegram message
+        id: message
+        run: |
+          cat > /tmp/telegram_message.txt << 'EOF'
+          🚀 PUSH DETECTED - Code Analysis in Progress
+
+          👤 Author: ${{ steps.commit.outputs.author }}
+          🌿 Branch: ${{ steps.commit.outputs.branch }}
+          📝 Commit: ${{ steps.commit.outputs.hash }}
+          💬 Message: ${{ steps.commit.outputs.message }}
+          ⏰ Date: ${{ steps.commit.outputs.date }}
+
+          🔗 GitHub: ${{ github.server_url }}/${{ github.repository }}/commit/${{ steps.commit.outputs.hash_long }}
+          📊 SonarCloud: https://sonarcloud.io/dashboard?id=WilmerBuestan_Reservas_seguras
+
+          📋 Files Changed: ${{ steps.files.outputs.count }}
+          ${{ steps.files.outputs.files }}
+
+          ⏳ SonarCloud Quality Gate Analysis Running...
+          ✅ Check results in SonarCloud dashboard
+          EOF
 
       - name: Send notification to Telegram
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          message: |
-            📢 **New Push Detected**
+          format: markdown
+          message_file: /tmp/telegram_message.txt
 
-            👤 **Author:** ${{ steps.commit.outputs.author }}
-            🌿 **Branch:** ${{ steps.commit.outputs.branch }}
-            📝 **Commit:** ${{ steps.commit.outputs.hash }}
-            💬 **Message:** ${{ steps.commit.outputs.message }}
-
-            🔗 **Link:** ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
-
-            📋 **Files Changed:**
-            ${{ steps.files.outputs.files }}
+      - name: Notify on workflow completion
+        if: always()
+        run: |
+          echo "✅ Telegram notification sent successfully"
+          echo "Commit: ${{ steps.commit.outputs.hash }}"
+          echo "Author: ${{ steps.commit.outputs.author }}"
+          echo "Branch: ${{ steps.commit.outputs.branch }}"
