@@ -92,7 +92,7 @@ La app estará disponible en http://localhost:3000
 
 - Gestión de microservicios independientes
 
--------
+------
 
 ## 🔍 Calidad de Código y Seguridad
 
